@@ -1,0 +1,18 @@
+{
+  "name": "kotlin-(net)",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:pr_1": "node PR_1/index.js"
+  },
+  "keywords": [],
+  "author": "d.a.akhmetzyanov <d.a.akhmetzyanov@tcsbank.ru>",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.5.0",
+    "inquirer": "^9.2.10",
+    "open": "^9.1.0"
+  }
+}
