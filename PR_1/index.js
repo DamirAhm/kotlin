@@ -1,4 +1,3 @@
-import {Prompter} from "./services/prompter/index.js";
 import {WikipediaService} from "./services/wikipedia/index.js";
 import open from 'open';
 import inquirer from "inquirer";
