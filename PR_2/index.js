@@ -4,6 +4,8 @@ import {ReportsService} from "./services/reports/reportsService.js";
 import { __dirname } from "./constants.js";
 import {Parser} from "./classes/parser.js";
 import inquirer from "inquirer";
+import { readFile } from "fs/promises";
+import {parseStringPromise} from "xml2js";
 
 (async () => {
     console.log("Чтобы досрочно завершить выполнение программы нажмите ctrl + C");
@@ -28,6 +30,8 @@ import inquirer from "inquirer";
         });
 
         const report = statisticsService.createReport();
+
+        console.log(report.split("\n")[0]);
 
         await reportsService.addReport(report);
 

@@ -1,4 +1,4 @@
-import {WikipediaService} from "./services/wikipedia/index.js";
+import {WikipediaService} from "./services/wikipedia/wikipediaService.js";
 import open from 'open';
 import inquirer from "inquirer";
 
