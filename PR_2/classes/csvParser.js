@@ -16,27 +16,17 @@ export class CsvParser extends Parser {
 
         await fileService.init();
 
-        const parser = parse({
-            delimiter: this.delimiter,
-            cast: true,
-            onRecord: record => callback(record),
-            columns: true
-        })
-
-        parser.on('error', (err) => {
-            console.error("Ошибка в Csv парсере: ", err.message);
-        });
-
-        parser.on('end', () => {
-            fileService.destroy();
-        })
-
         await fileService.readByLines( async (line) => {
             try {
-                parser.write(line + "\n");
+                const [city, street, house, floor] = line.split(this.delimiter);
+
+                callback({
+                    city: city.slice(1, -1),
+                    street: street.slice(1, -1),
+                    house: parseInt(house),
+                    floor: parseInt(floor)
+                });
             } catch (err) {}
         })
-
-        await parser.end();
     }
 }

@@ -29,7 +29,7 @@ export class FileService {
         const rl = readline.createInterface({
             input: this.#fileStream,
             crlfDelay: Infinity
-        })
+        });
 
         for await (const line of rl) {
             lineCallback(line);

@@ -4,8 +4,6 @@ import {ReportsService} from "./services/reports/reportsService.js";
 import { __dirname } from "./constants.js";
 import {Parser} from "./classes/parser.js";
 import inquirer from "inquirer";
-import { readFile } from "fs/promises";
-import {parseStringPromise} from "xml2js";
 
 (async () => {
     console.log("Чтобы досрочно завершить выполнение программы нажмите ctrl + C");
@@ -29,11 +27,13 @@ import {parseStringPromise} from "xml2js";
             statisticsService.processRecord(record);
         });
 
-        const report = statisticsService.createReport();
+        statisticsService.finishReport();
 
-        console.log(report.split("\n")[0]);
+        const data = statisticsService.data;
 
-        await reportsService.addReport(report);
+        console.log(`Обработка заняла ${Math.floor(data.endTime - data.startTime)} миллисекунд`);
+
+        await reportsService.addReport(data);
 
         statisticsService.flushall();
     }

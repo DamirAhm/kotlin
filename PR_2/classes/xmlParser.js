@@ -2,15 +2,9 @@ import {Parser} from "./parser.js";
 import { parseStringPromise } from "xml2js";
 import {FileService} from "../services/file/fileService.js";
 
+const itemRegExp = /<item city="(.+)" street="(.+)" house="(.+)" floor="(.+)" \/>/
+
 export class XmlParser extends Parser {
-    itemField = 'item';
-
-    constructor({itemField} = {}) {
-        super();
-
-        this.itemField = itemField || this.itemField;
-    }
-
     async parse(filename, callback) {
         const fileService = new FileService(filename);
 
@@ -18,10 +12,15 @@ export class XmlParser extends Parser {
 
         await fileService.readByLines( async (line) => {
             try {
-                const record = await parseStringPromise(line);
+                if (itemRegExp.test(line)) {
+                    const [_, city, street, house, floor] = line.match(itemRegExp);
 
-                if (record[this.itemField]) {
-                    callback(record[this.itemField].$);
+                    callback({
+                        city,
+                        street,
+                        house: parseInt(house),
+                        floor: parseInt(floor),
+                    })
                 }
             } catch (err) {}
         })
@@ -29,3 +28,11 @@ export class XmlParser extends Parser {
         await fileService.destroy();
     }
 }
+
+/*
+{
+    item: {
+        $: { city, street, house, floor }
+    }
+}
+*/
