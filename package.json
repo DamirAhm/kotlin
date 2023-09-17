@@ -5,8 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:pr_1": "node PR_1/index.js",
-    "start:pr_2": "node PR_2/index.js"
+    "init-bun": "export PATH=$PATH:~/.bun/bin",
+    "start:pr_1": "bun run PR_1/index.ts",
+    "start:pr_2": "bun run PR_2/index.ts"
   },
   "keywords": [],
   "author": "d.a.akhmetzyanov <d.a.akhmetzyanov@tcsbank.ru>",
@@ -20,6 +21,8 @@
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
-    "@types/node": "^20.6.0"
+    "@types/inquirer": "^9.0.3",
+    "@types/node": "^20.6.0",
+    "bun-types": "^1.0.2"
   }
 }
