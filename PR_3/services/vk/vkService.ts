@@ -3,8 +3,6 @@ import { VK_HOST } from './constants';
 import { GetUserResponseDto } from './dto/getUserResponseDto';
 import { injectable } from 'tsyringe';
 import { GetMessageUploadServerResponseDto } from './dto/getMessageUploadServerResponseDto';
-import { createReadStream, createWriteStream } from 'fs';
-import path from 'path';
 import FormData from 'form-data';
 //@ts-ignore
 import fetch from 'node-fetch';
