@@ -6,7 +6,7 @@
   "scripts": {
     "init-bun": "export PATH=$PATH:~/.bun/bin",
     "bun": "~/.bun/bin/bun",
-    "start:pr_1": "npmm run bun run --watch PR_1/index.ts",
+    "start:pr_1": "ts-node PR_1/index.ts",
     "start:pr_2": "npm run bun run --watch PR_2/index.ts",
     "start:pr_3": "ts-node PR_3/index.ts",
     "studio": "prisma studio"

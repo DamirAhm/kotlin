@@ -6,10 +6,7 @@ import { BotController } from '../botController';
 
 @autoInjectable()
 export class StartController extends BotController {
-	constructor(
-		private readonly usersService?: UsersService,
-		private readonly vkService?: VkService,
-	) {
+	constructor(private readonly usersService?: UsersService) {
 		super();
 	}
 
@@ -37,7 +34,9 @@ export class StartController extends BotController {
 	getHelpText(fullName: string) {
 		return [
 			`Привет ${fullName}, с помощью этого бота ты сможешь найти и сохранить себе самые смешные гифочки`,
-			'Напиши /find {запрос}, чтобы найти гифку по запросу',
+			'Напиши /find {запрос} - {количество}, чтобы найти гифку по запросу или тегу, количество опционально и по умолчанию = 5',
+			'Напиши /favorites чтобы посмотреть все гифки которые ты лайкнул',
+			'Напиши /top чтобы посмотреть топ 5 залайканных гифок',
 		].join('\n\n');
 	}
 }

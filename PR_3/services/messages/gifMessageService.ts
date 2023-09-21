@@ -6,6 +6,7 @@ import { GifsService } from '../gifs/gifsService';
 import VkBotMarkup from 'node-vk-bot-api/lib/markup';
 import { GifWithLikesAndTagsDto } from './dto/gifWithLikesAndTagsDto';
 import { GifEventDto } from '../../controllers/events/gifEventDto';
+import { Gif } from '@prisma/client';
 
 @injectable()
 export class GifMessageService {
@@ -38,19 +39,17 @@ export class GifMessageService {
 		);
 
 		await ctx.bot.sendMessage(
-			ctx.message.from_id,
+			ctx.message.peer_id,
 			gif.tags.map(({ value }) => value).join(', '),
 			attachmentString,
-			this.createGifKeyboard(gif, isLiked),
+			this.createGifKeyboard({ ...gif, attachmentString }, isLiked),
 		);
 	}
 
-	createGifKeyboard(gif: Omit<GifEventDto, 'event'>, isLiked: boolean) {
+	createGifKeyboard(gif: GifWithLikesAndTagsDto, isLiked: boolean) {
 		const commonPayload: Omit<GifEventDto, 'event'> = {
 			id: gif.id,
 			attachmentString: gif.attachmentString,
-			tags: gif.tags,
-			likes: gif.likes,
 		};
 
 		return VkBotMarkup.keyboard([
@@ -72,7 +71,7 @@ export class GifMessageService {
 						event: isLiked ? Events.Dislike : Events.Like,
 						...commonPayload,
 					}),
-					label: isLiked ? '💔' : '❤️',
+					label: isLiked ? `${gif.likes.length} 💔` : `${gif.likes.length} ❤️`,
 				},
 				color: 'secondary',
 			}),
@@ -84,11 +83,13 @@ export class GifMessageService {
 		data: GifEventDto,
 		liked: boolean,
 	) {
-		await this.vkService.updateMessage({
-			message: data.tags.map(({ value }) => value).join(', '),
+		const gif = await this.gifsService.findById(data.id);
+
+		return this.vkService.updateMessage({
+			message: gif?.tags.map(({ value }) => value).join(', '),
 			conversation_message_id: message.conversation_message_id,
 			//@ts-ignore
-			keyboard: this.createGifKeyboard(data, liked).toJSON(),
+			keyboard: this.createGifKeyboard(gif, liked).toJSON(),
 			peer_id: message.peer_id,
 			attachment: data.attachmentString,
 		});

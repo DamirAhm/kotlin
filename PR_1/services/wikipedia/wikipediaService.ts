@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { WIKIPEDIA_BASE_URL } from './constants.js';
+import { WIKIPEDIA_BASE_URL } from './constants';
 import { PageType } from './types/pageType';
 import { SearchType } from './types/searchType';
 

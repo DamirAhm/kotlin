@@ -5,6 +5,4 @@ export type GifEventDto = {
 	event: Events;
 	id: Gif['id'];
 	attachmentString: string | null;
-	tags: Tag[];
-	likes: User[];
 };

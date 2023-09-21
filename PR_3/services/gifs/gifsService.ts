@@ -1,7 +1,7 @@
 import { FindGifsByTagDto } from './dto/findGifsByTagDto';
 import { AddToFavoritesDto } from './dto/addToFavoritesDto';
 import { RemoveFromFavoritesDto } from './dto/removeFromFavoritesDto';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../databaseService';
 import { injectable } from 'tsyringe';
 
@@ -43,38 +43,39 @@ export class GifsService {
 		return this.db.gif.create({ data, include: { likes: true, tags: true } });
 	}
 
-	async findMany(data: Prisma.GifFindManyArgs) {
-		return this.db.gif.findMany(data);
-	}
-
-	async findGifsByTag(data: FindGifsByTagDto) {
-		const res = await this.db.tag.findMany({
-			where: data,
-			select: {
-				gif: true,
-			},
-		});
-
-		return res.map(({ gif }) => gif);
-	}
-
-	async findFavorites(vkId: number) {
-		const res = await this.db.user.findUnique({
+	findGifsByTag(data: FindGifsByTagDto) {
+		return this.db.gif.findMany({
 			where: {
-				vkId,
+				tags: {
+					some: {
+						value: {
+							contains: data.value,
+						},
+						userId: data.userId,
+					},
+				},
 			},
-			select: {
-				liked: true,
+			include: {
+				likes: true,
+				tags: true,
 			},
 		});
+	}
 
-		if (!res) {
-			console.log('Пользователь не найден при поиске любимых гифок');
-
-			return [];
-		}
-
-		return res.liked;
+	findFavorites(vkId: number) {
+		return this.db.gif.findMany({
+			where: {
+				likes: {
+					some: {
+						vkId,
+					},
+				},
+			},
+			include: {
+				tags: true,
+				likes: true,
+			},
+		});
 	}
 
 	addToFavorites(data: AddToFavoritesDto) {
@@ -114,7 +115,11 @@ export class GifsService {
 					_count: 'desc',
 				},
 			},
-			take: 10,
+			include: {
+				likes: true,
+				tags: true,
+			},
+			take: 5,
 		});
 	}
 }

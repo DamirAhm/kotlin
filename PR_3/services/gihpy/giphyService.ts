@@ -15,9 +15,9 @@ export class GiphyService {
 		this.fetchClient = new GiphyFetch(process.env.GIPHY_API_KEY!);
 	}
 
-	async search(query: string) {
+	async search(query: string, limit = 5) {
 		const { data } = await this.fetchClient.search(query, {
-			limit: 5,
+			limit,
 		});
 
 		return Promise.all(

@@ -24,7 +24,7 @@ export class UsersService {
 		if (vkUser) {
 			const user = await this.create({
 				vkId: vkUser.id,
-				fullName: vkUser.last_name + ' ' + vkUser.last_name,
+				fullName: vkUser.last_name + ' ' + vkUser.first_name,
 			});
 
 			console.log('Создан пользователь', user);

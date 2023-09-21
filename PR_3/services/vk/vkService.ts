@@ -24,6 +24,15 @@ export class VkService {
 		},
 	});
 
+	answerEvent(data: any) {
+		return this.axiosInstance.post('messages.sendMessageEventAnswer', data, {
+			params: {
+				access_token: this.communityToken,
+				...data,
+			},
+		});
+	}
+
 	updateMessage(update: Partial<VkBotMessage & { message: string }>) {
 		return this.axiosInstance.post('messages.edit', update, {
 			params: {
